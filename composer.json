@@ -38,6 +38,7 @@
         "slevomat/coding-standard": "^8",
         "squizlabs/php_codesniffer" : "^3",
         "vimeo/psalm": "^5",
+        "webservco/coding-standards": "^0",
         "webservco/component-common": "^0"
     },
     "require": {
