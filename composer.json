@@ -25,7 +25,9 @@
     "license" : "MIT",
     "name" : "webservco/session",
     "require": {
-        "php" : "^8.2"
+        "php" : "^8.2",
+        "webservco/configuration" : "^0",
+        "webservco/data" : "^0"
     },
     "require-dev": {
         "pds/skeleton": "^1",
