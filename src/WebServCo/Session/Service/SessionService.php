@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace WebServCo\Session\Service;
 
+use OutOfRangeException;
 use UnexpectedValueException;
 use WebServCo\Session\Contract\SessionServiceInterface;
 use WebServCo\Session\DataTransfer\SessionConfiguration;
 
+use function array_key_exists;
 use function ini_set;
 use function session_cache_expire;
 use function session_cache_limiter;
@@ -26,6 +28,15 @@ final class SessionService implements SessionServiceInterface
     {
     }
 
+    public function assertStarted(): bool
+    {
+        if (!$this->isStarted()) {
+            throw new OutOfRangeException('Session is not started.');
+        }
+
+        return true;
+    }
+
     /**
      * Psalm error:
      * The declared return type
@@ -42,6 +53,8 @@ final class SessionService implements SessionServiceInterface
      */
     public function getSessionData(): array
     {
+        $this->assertStarted();
+
         return $_SESSION;
     }
     // @phpcs:enable
@@ -57,6 +70,8 @@ final class SessionService implements SessionServiceInterface
      */
     public function setSessionDataItem(string $key, mixed $value): bool
     {
+        $this->assertStarted();
+
         /**
          * Psalm error:
          * Unable to determine the type of this assignment.
@@ -65,6 +80,32 @@ final class SessionService implements SessionServiceInterface
          * @psalm-suppress MixedAssignment
          */
         $_SESSION[$key] = $value;
+
+        return true;
+    }
+
+    /**
+     * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function unsetSessionDataItem(string $key): bool
+    {
+        $this->assertStarted();
+
+        /**
+         * Psalm error:
+         * Argument 2 of array_key_exists expects array<array-key, mixed>,
+         * but possibly undefined array<non-empty-string, mixed> provided
+         *
+         * However there is the assertStarted, so the $_SESSION array is indeed defined.
+         *
+         * @psalm-suppress InvalidScalarArgument
+         */
+        if (!array_key_exists($key, $_SESSION)) {
+            return false;
+        }
+
+        unset($_SESSION[$key]);
 
         return true;
     }

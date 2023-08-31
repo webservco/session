@@ -6,6 +6,8 @@ namespace WebServCo\Session\Contract;
 
 interface SessionServiceInterface
 {
+    public function assertStarted(): bool;
+
     /**
      * Convenience method to access $_SESSION array.
      *
@@ -20,6 +22,8 @@ interface SessionServiceInterface
     public function isStarted(): bool;
 
     public function setSessionDataItem(string $key, mixed $value): bool;
+
+    public function unsetSessionDataItem(string $key): bool;
 
     public function start(): bool;
 }
