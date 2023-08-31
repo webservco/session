@@ -22,13 +22,51 @@ use const PHP_SESSION_ACTIVE;
 
 final class SessionService implements SessionServiceInterface
 {
-    public function __construct(private SessionConfiguration $sessionConfiguration)
+    public function __construct(private SessionConfiguration $sessionConfiguration,)
     {
     }
+
+    /**
+     * Psalm error:
+     * The declared return type
+     * 'array<non-empty-string, mixed>' for getSessionData is incorrect, got
+     * 'array<non-empty-string, mixed>'
+     * Exact same thing char by char, no idea how to fix (search keyword PSALM_SAME).
+     *
+     * @phpcs:disable: SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+     * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+     * @psalm-suppress InvalidReturnType,InvalidReturnStatement
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @todo study Psalm fix
+     * @return array<non-empty-string,mixed>
+     */
+    public function getSessionData(): array
+    {
+        return $_SESSION;
+    }
+    // @phpcs:enable
 
     public function isStarted(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
+    }
+
+    /**
+     * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function setSessionDataItem(string $key, mixed $value): bool
+    {
+        /**
+         * Psalm error:
+         * Unable to determine the type of this assignment.
+         * However this is indeed mixed, no solution but to suppress error.
+         *
+         * @psalm-suppress MixedAssignment
+         */
+        $_SESSION[$key] = $value;
+
+        return true;
     }
 
     public function start(?string $storagePath = null): bool
