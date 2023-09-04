@@ -10,14 +10,18 @@ use WebServCo\Session\Contract\SessionServiceInterface;
 use WebServCo\Session\DataTransfer\SessionConfiguration;
 
 use function array_key_exists;
+use function ini_get;
 use function ini_set;
 use function session_cache_expire;
 use function session_cache_limiter;
+use function session_destroy;
 use function session_name;
 use function session_save_path;
 use function session_set_cookie_params;
 use function session_start;
 use function session_status;
+use function session_unset;
+use function setcookie;
 
 use const PHP_SAPI;
 use const PHP_SESSION_ACTIVE;
@@ -33,6 +37,37 @@ final class SessionService implements SessionServiceInterface
         if (!$this->isStarted()) {
             throw new OutOfRangeException('Session is not started.');
         }
+
+        return true;
+    }
+
+    public function destroy(): bool
+    {
+        // Session must be started.
+        $this->assertStarted();
+
+        // Clear $_SESSION array.
+        session_unset();
+
+        // Check if cookie is used to store the session id (default behavior).
+        if ((bool) ini_get('session.use_cookies')) {
+            // Set a cookie with the same parameters used to start the session, but with date in the past.
+            setcookie(
+                $this->getSessionName(),
+                '',
+                [
+                    'domain' => $this->sessionConfiguration->cookieConfiguration->domain,
+                    'expires' => $this->sessionConfiguration->cookieConfiguration->lifetime,
+                    'httponly' => $this->sessionConfiguration->cookieConfiguration->httpOnly,
+                    'path' => $this->sessionConfiguration->cookieConfiguration->path,
+                    'samesite' => $this->sessionConfiguration->cookieConfiguration->sameSite,
+                    'secure' => $this->sessionConfiguration->cookieConfiguration->secure,
+                ],
+            );
+        }
+
+        // Destroy session.
+        session_destroy();
 
         return true;
     }
@@ -158,6 +193,16 @@ final class SessionService implements SessionServiceInterface
         return true;
     }
 
+    private function getSessionName(): string
+    {
+        $sessionName = session_name();
+        if ($sessionName === false) {
+            throw new UnexpectedValueException('Error getting session name.');
+        }
+
+        return $sessionName;
+    }
+
     private function setCacheExpire(): bool
     {
         /**
@@ -175,10 +220,10 @@ final class SessionService implements SessionServiceInterface
     {
         return session_set_cookie_params([
             'domain' => $this->sessionConfiguration->cookieConfiguration->domain,
-            'httponly' => $this->sessionConfiguration->cookieConfiguration->httponly,
+            'httponly' => $this->sessionConfiguration->cookieConfiguration->httpOnly,
             'lifetime' => $this->sessionConfiguration->cookieConfiguration->lifetime,
             'path' => $this->sessionConfiguration->cookieConfiguration->path,
-            'samesite' => $this->sessionConfiguration->cookieConfiguration->samesite,
+            'samesite' => $this->sessionConfiguration->cookieConfiguration->sameSite,
             'secure' => $this->sessionConfiguration->cookieConfiguration->secure,
         ]);
     }

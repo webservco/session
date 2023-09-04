@@ -8,6 +8,8 @@ interface SessionServiceInterface
 {
     public function assertStarted(): bool;
 
+    public function destroy(): bool;
+
     /**
      * Convenience method to access $_SESSION array.
      *
