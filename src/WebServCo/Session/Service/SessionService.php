@@ -10,6 +10,7 @@ use WebServCo\Session\Contract\SessionServiceInterface;
 use WebServCo\Session\DataTransfer\SessionConfiguration;
 
 use function array_key_exists;
+use function in_array;
 use function ini_get;
 use function ini_set;
 use function session_cache_expire;
@@ -148,7 +149,7 @@ final class SessionService implements SessionServiceInterface
     public function start(?string $storagePath = null): bool
     {
         // Check CLI
-        if (PHP_SAPI === 'cli') {
+        if (in_array(PHP_SAPI, ['cli', 'cgi-fcgi'], true)) {
             // Not starting in CLI mode.
             return false;
         }
