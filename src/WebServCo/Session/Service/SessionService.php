@@ -74,18 +74,21 @@ final class SessionService implements SessionServiceInterface
     }
 
     /**
-     * Psalm error:
-     * The declared return type
-     * 'array<non-empty-string, mixed>' for getSessionData is incorrect, got
-     * 'array<non-empty-string, mixed>'
-     * Exact same thing char by char, no idea how to fix (search keyword PSALM_SAME).
+     * Psalm errors:
+     * The declared return type 'array<array-key, mixed>'
+     * for WebServCo\Session\Service\SessionService::getSessionData is incorrect,
+     * got 'array<non-empty-string, mixed>' (see https://psalm.dev/011)
+     * The inferred type 'array<non-empty-string, mixed>'
+     * does not match the declared return type 'array<array-key, mixed>'
+     * for WebServCo\Session\Service\SessionService::getSessionData (see https://psalm.dev/128)
+     * If do as implied => phpstan errors
      *
      * @phpcs:disable: SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-     * @psalm-suppress InvalidReturnType,InvalidReturnStatement
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
+     * @SuppressWarnings("PHPMD.Superglobals")
      * @todo study Psalm fix
-     * @return array<non-empty-string,mixed>
+     * @return array<mixed>
      */
     public function getSessionData(): array
     {
@@ -102,7 +105,7 @@ final class SessionService implements SessionServiceInterface
 
     /**
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings("PHPMD.Superglobals")
      */
     public function setSessionDataItem(string $key, mixed $value): bool
     {
@@ -122,7 +125,7 @@ final class SessionService implements SessionServiceInterface
 
     /**
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings("PHPMD.Superglobals")
      */
     public function unsetSessionDataItem(string $key): bool
     {
