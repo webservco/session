@@ -7,7 +7,7 @@ namespace WebServCo\Session\Service;
 use OutOfRangeException;
 use UnexpectedValueException;
 use WebServCo\Session\Contract\SessionServiceInterface;
-use WebServCo\Session\DataTransfer\SessionConfiguration;
+use WebServCo\Session\Model\DataTransfer\SessionConfiguration;
 
 use function array_key_exists;
 use function in_array;

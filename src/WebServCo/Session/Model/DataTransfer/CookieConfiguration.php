@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebServCo\Session\DataTransfer;
+namespace WebServCo\Session\Model\DataTransfer;
 
 use OutOfRangeException;
 use WebServCo\Data\Contract\Transfer\DataTransferInterface;
