@@ -17,7 +17,14 @@ use function time;
 final class CookieService implements CookieServiceInterface
 {
     /**
+     * Psalm errors:
+     * Type string for $_COOKIE[$cookieName] is always !scalar (see https://psalm.dev/056)
+     * Redundant cast to string (see https://psalm.dev/262)
+     * Psalm types cookie values as string, however they can also be arrays (eg. "name[]=value"),
+     * and the superglobal can be modified at runtime, so both the check and the cast are needed.
+     *
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+     * @psalm-suppress TypeDoesNotContainType, RedundantCast
      * @SuppressWarnings("PHPMD.Superglobals")
      */
     #[Override]

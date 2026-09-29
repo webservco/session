@@ -77,20 +77,9 @@ final class SessionService implements SessionServiceInterface
     }
 
     /**
-     * Psalm errors:
-     * The declared return type 'array<array-key, mixed>'
-     * for WebServCo\Session\Service\SessionService::getSessionData is incorrect,
-     * got 'array<non-empty-string, mixed>' (see https://psalm.dev/011)
-     * The inferred type 'array<non-empty-string, mixed>'
-     * does not match the declared return type 'array<array-key, mixed>'
-     * for WebServCo\Session\Service\SessionService::getSessionData (see https://psalm.dev/128)
-     * If do as implied => phpstan errors
-     *
      * @phpcs:disable: SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      * @SuppressWarnings("PHPMD.Superglobals")
-     * @todo study Psalm fix
      * @return array<mixed>
      */
     #[Override]
@@ -98,7 +87,16 @@ final class SessionService implements SessionServiceInterface
     {
         $this->assertStarted();
 
-        return $_SESSION;
+        /**
+         * Psalm types the session superglobal as "possibly undefined" array<non-empty-string, mixed>,
+         * which it considers incompatible with the declared return type.
+         * However there is the assertStarted, so the $_SESSION array is indeed defined.
+         *
+         * @var array<mixed> $sessionData
+         */
+        $sessionData = $_SESSION;
+
+        return $sessionData;
     }
     // @phpcs:enable
 
