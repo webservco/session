@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Session\Factory;
 
+use Override;
 use WebServCo\Configuration\Contract\ConfigurationGetterInterface;
 use WebServCo\Session\Contract\CookieConfigurationFactoryInterface;
 use WebServCo\Session\Contract\SessionServiceFactoryInterface;
@@ -19,6 +20,7 @@ final class SessionServiceFactory implements SessionServiceFactoryInterface
     ) {
     }
 
+    #[Override]
     public function createSessionService(): SessionServiceInterface
     {
         return new SessionService($this->createSessionConfiguration());

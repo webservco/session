@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebServCo\Session\Factory;
 
 use OutOfRangeException;
+use Override;
 use WebServCo\Configuration\Contract\ConfigurationGetterInterface;
 use WebServCo\Session\Contract\CookieConfigurationFactoryInterface;
 use WebServCo\Session\Model\DataTransfer\CookieConfiguration;
@@ -17,6 +18,7 @@ final class CookieConfigurationFactory implements CookieConfigurationFactoryInte
     {
     }
 
+    #[Override]
     public function createCookieConfiguration(): CookieConfiguration
     {
         // Validation already done in CookieConfiguration constructor, done also here for phpstan.

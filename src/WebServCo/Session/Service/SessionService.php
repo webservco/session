@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebServCo\Session\Service;
 
 use OutOfRangeException;
+use Override;
 use UnexpectedValueException;
 use WebServCo\Session\Contract\SessionServiceInterface;
 use WebServCo\Session\Model\DataTransfer\SessionConfiguration;
@@ -33,6 +34,7 @@ final class SessionService implements SessionServiceInterface
     {
     }
 
+    #[Override]
     public function assertStarted(): bool
     {
         if (!$this->isStarted()) {
@@ -42,6 +44,7 @@ final class SessionService implements SessionServiceInterface
         return true;
     }
 
+    #[Override]
     public function destroy(): bool
     {
         // Session must be started.
@@ -90,6 +93,7 @@ final class SessionService implements SessionServiceInterface
      * @todo study Psalm fix
      * @return array<mixed>
      */
+    #[Override]
     public function getSessionData(): array
     {
         $this->assertStarted();
@@ -98,6 +102,7 @@ final class SessionService implements SessionServiceInterface
     }
     // @phpcs:enable
 
+    #[Override]
     public function isStarted(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
@@ -107,6 +112,7 @@ final class SessionService implements SessionServiceInterface
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
      * @SuppressWarnings("PHPMD.Superglobals")
      */
+    #[Override]
     public function setSessionDataItem(string $key, mixed $value): bool
     {
         $this->assertStarted();
@@ -127,6 +133,7 @@ final class SessionService implements SessionServiceInterface
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
      * @SuppressWarnings("PHPMD.Superglobals")
      */
+    #[Override]
     public function unsetSessionDataItem(string $key): bool
     {
         $this->assertStarted();
@@ -149,6 +156,7 @@ final class SessionService implements SessionServiceInterface
         return true;
     }
 
+    #[Override]
     public function start(?string $storagePath = null): bool
     {
         // Check CLI

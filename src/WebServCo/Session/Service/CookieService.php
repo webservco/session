@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Session\Service;
 
+use Override;
 use UnexpectedValueException;
 use WebServCo\Session\Contract\CookieServiceInterface;
 use WebServCo\Session\Model\DataTransfer\CookieConfiguration;
@@ -19,6 +20,7 @@ final class CookieService implements CookieServiceInterface
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
      * @SuppressWarnings("PHPMD.Superglobals")
      */
+    #[Override]
     public function getValue(string $cookieName): ?string
     {
         if (array_key_exists($cookieName, $_COOKIE)) {
@@ -36,6 +38,7 @@ final class CookieService implements CookieServiceInterface
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
      * @SuppressWarnings("PHPMD.Superglobals")
      */
+    #[Override]
     public function removeCookie(string $name): bool
     {
         if (!isset($_COOKIE[$name])) {
@@ -47,6 +50,7 @@ final class CookieService implements CookieServiceInterface
         return setcookie($name, '', ['expires' => -1]);
     }
 
+    #[Override]
     public function set(CookieConfiguration $configuration, string $name, string $value): bool
     {
         return setcookie(
