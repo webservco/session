@@ -10,10 +10,6 @@ use WebServCo\Session\Contract\CookieServiceInterface;
 use WebServCo\Session\Service\CookieService;
 
 /**
- * PhanRedefinedExtendedClass
- * "[..] extends abstract Class [..] declared at [..] which is also declared at [..]"
- *
- * @suppress PhanRedefinedExtendedClass
  * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
  * @SuppressWarnings("PHPMD.Superglobals")
  */
