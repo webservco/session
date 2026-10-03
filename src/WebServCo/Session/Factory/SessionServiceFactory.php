@@ -12,11 +12,11 @@ use WebServCo\Session\Contract\SessionServiceInterface;
 use WebServCo\Session\Model\DataTransfer\SessionConfiguration;
 use WebServCo\Session\Service\SessionService;
 
-final class SessionServiceFactory implements SessionServiceFactoryInterface
+final readonly class SessionServiceFactory implements SessionServiceFactoryInterface
 {
     public function __construct(
-        private readonly CookieConfigurationFactoryInterface $cookieConfigurationFactory,
-        private readonly ConfigurationGetterInterface $configurationGetter,
+        private CookieConfigurationFactoryInterface $cookieConfigurationFactory,
+        private ConfigurationGetterInterface $configurationGetter,
     ) {
     }
 

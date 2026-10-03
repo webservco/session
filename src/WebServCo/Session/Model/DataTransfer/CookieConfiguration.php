@@ -9,7 +9,7 @@ use WebServCo\Data\Contract\Transfer\DataTransferInterface;
 
 use function in_array;
 
-final class CookieConfiguration implements DataTransferInterface
+final readonly class CookieConfiguration implements DataTransferInterface
 {
     /**
      * sameSite param notation required by phpstan.
@@ -17,12 +17,12 @@ final class CookieConfiguration implements DataTransferInterface
      * @param 'Lax'|'None'|'Strict' $sameSite
      */
     public function __construct(
-        public readonly int $lifetime,
-        public readonly string $path,
-        public readonly string $domain,
-        public readonly bool $secure,
-        public readonly bool $httpOnly,
-        public readonly string $sameSite,
+        public int $lifetime,
+        public string $path,
+        public string $domain,
+        public bool $secure,
+        public bool $httpOnly,
+        public string $sameSite,
     ) {
         /**
          * Enforce sameSite attribute value; not required by phpstan.

@@ -12,9 +12,9 @@ use WebServCo\Session\Model\DataTransfer\CookieConfiguration;
 
 use function in_array;
 
-final class CookieConfigurationFactory implements CookieConfigurationFactoryInterface
+final readonly class CookieConfigurationFactory implements CookieConfigurationFactoryInterface
 {
-    public function __construct(private readonly ConfigurationGetterInterface $configurationGetter)
+    public function __construct(private ConfigurationGetterInterface $configurationGetter)
     {
     }
 

@@ -6,12 +6,12 @@ namespace WebServCo\Session\Model\DataTransfer;
 
 use WebServCo\Data\Contract\Transfer\DataTransferInterface;
 
-final class SessionConfiguration implements DataTransferInterface
+final readonly class SessionConfiguration implements DataTransferInterface
 {
     public function __construct(
-        public readonly CookieConfiguration $cookieConfiguration,
-        public readonly int $expire,
-        public readonly bool $useStrictStoragePath,
+        public CookieConfiguration $cookieConfiguration,
+        public int $expire,
+        public bool $useStrictStoragePath,
     ) {
     }
 }
