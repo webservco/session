@@ -97,7 +97,7 @@ final class CookieServiceGetValueTest extends AbstractCookieServiceTester
         // Test.
 
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Cookie value is not scalar.');
+        $this->expectExceptionMessageIs('Cookie value is not scalar.');
 
         $this->getService()->getValue(self::COOKIE_NAME);
     }
@@ -113,7 +113,7 @@ final class CookieServiceGetValueTest extends AbstractCookieServiceTester
         // Test.
 
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Cookie value is not scalar.');
+        $this->expectExceptionMessageIs('Cookie value is not scalar.');
 
         $this->getService()->getValue(self::COOKIE_NAME);
     }
