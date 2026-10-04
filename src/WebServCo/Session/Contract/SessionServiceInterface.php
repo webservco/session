@@ -16,7 +16,6 @@ interface SessionServiceInterface
      * Why: avoid multiple static analysis error throughout the implementing code.
      *
      * @phpcs:disable: SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
-     * @SuppressWarnings("PHPMD.Superglobals")
      * @return array<mixed>
      */
     public function getSessionData(): array;
