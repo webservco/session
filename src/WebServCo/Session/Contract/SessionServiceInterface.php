@@ -26,5 +26,5 @@ interface SessionServiceInterface
 
     public function unsetSessionDataItem(string $key): bool;
 
-    public function start(): bool;
+    public function start(?string $storagePath = null): bool;
 }
