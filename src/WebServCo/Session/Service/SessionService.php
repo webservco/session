@@ -194,7 +194,7 @@ final class SessionService implements SessionServiceInterface
 
         $this->setCookieParams();
 
-        session_name('webservco');
+        session_name($this->sessionConfiguration->cookieName);
 
         if (session_start() === false) {
             throw new UnexpectedValueException('Unable to start session.');

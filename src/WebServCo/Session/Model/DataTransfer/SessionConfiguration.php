@@ -10,6 +10,7 @@ final readonly class SessionConfiguration implements DataTransferInterface
 {
     public function __construct(
         public CookieConfiguration $cookieConfiguration,
+        public string $cookieName,
         public int $expire,
         public bool $useStrictStoragePath,
     ) {
