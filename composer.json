@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library.",
+    "description" : "A PHP component/library. PHP sessions with cookie settings and lifetime taken from the configuration.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
