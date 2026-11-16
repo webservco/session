@@ -14,10 +14,10 @@ use function array_key_exists;
 use function in_array;
 use function ini_get;
 use function ini_set;
-use function session_cache_expire;
 use function session_cache_limiter;
 use function session_destroy;
 use function session_name;
+use function session_regenerate_id;
 use function session_save_path;
 use function session_set_cookie_params;
 use function session_start;
@@ -76,6 +76,12 @@ final class SessionService implements SessionServiceInterface
         return true;
     }
 
+    #[Override]
+    public function getCookieName(): string
+    {
+        return $this->sessionConfiguration->cookieName;
+    }
+
     /**
      * @phpcs:disable: SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
      * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
@@ -104,6 +110,19 @@ final class SessionService implements SessionServiceInterface
     public function isStarted(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
+    }
+
+    #[Override]
+    public function regenerateId(): bool
+    {
+        $this->assertStarted();
+
+        // Delete the old session, so that its ID can't be used anymore.
+        if (!session_regenerate_id(true)) {
+            throw new UnexpectedValueException('Unable to regenerate the session ID.');
+        }
+
+        return true;
     }
 
     /**
@@ -169,11 +188,17 @@ final class SessionService implements SessionServiceInterface
         }
 
         /**
-         * Set cache limiter.
+         * No cache limiter: PHP sends no cache headers of its own, and the application decides
+         * (eg. `Cache-Control: private, no-cache` for a response that depends on the session).
+         * PHP only knows `nocache`, `private`, `private_no_expire` and `public`.
          */
-        session_cache_limiter('public, must-revalidate');
+        session_cache_limiter('');
 
-        $this->setCacheExpire();
+        /**
+         * Strict mode: a session ID the server didn't create is refused, and the session starts with a new one
+         * (session fixation).
+         */
+        ini_set('session.use_strict_mode', '1');
 
         /**
          * Set garbage collector timeout (seconds).
@@ -211,19 +236,6 @@ final class SessionService implements SessionServiceInterface
         }
 
         return $sessionName;
-    }
-
-    private function setCacheExpire(): bool
-    {
-        /**
-         * Set cache expire (minutes).
-         */
-        $cacheExpire = session_cache_expire((int) ($this->sessionConfiguration->expire / 60));
-        if ($cacheExpire === false) {
-            throw new UnexpectedValueException('Unable to set cache expire.');
-        }
-
-        return true;
     }
 
     private function setCookieParams(): bool
