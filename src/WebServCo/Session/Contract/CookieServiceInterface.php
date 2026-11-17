@@ -10,7 +10,10 @@ interface CookieServiceInterface
 {
     public function getValue(string $cookieName): ?string;
 
-    public function removeCookie(string $name): bool;
+    /**
+     * Uses the same configuration as `set()`: the browser only removes the cookie if the domain and path match.
+     */
+    public function removeCookie(CookieConfiguration $configuration, string $name): bool;
 
     public function set(CookieConfiguration $configuration, string $name, string $value): bool;
 }

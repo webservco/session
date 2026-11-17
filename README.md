@@ -67,7 +67,7 @@ $sessionService = $sessionServiceFactory->createSessionService();
 | --- | --- | --- |
 | `Contract\SessionServiceInterface` | `Service\SessionService` | Start, read, write and destroy the session; renew its ID; name its cookie. |
 | `Contract\SessionServiceFactoryInterface` | `Factory\SessionServiceFactory` | Creates the service from the configuration (`SESSION_*` keys and `COOKIE_NAME_SESSION`). |
-| `Contract\CookieServiceInterface` | `Service\CookieService` | Set (with a `CookieConfiguration`), read and remove cookies. |
+| `Contract\CookieServiceInterface` | `Service\CookieService` | Set and remove (both with a `CookieConfiguration`), read cookies. |
 | `Contract\CookieConfigurationFactoryInterface` | `Factory\CookieConfigurationFactory` | Reads the other `COOKIE_*` keys. |
 
 Namespaces are relative to `WebServCo\Session\`.

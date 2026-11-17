@@ -46,7 +46,7 @@ final class CookieService implements CookieServiceInterface
      * @SuppressWarnings("PHPMD.Superglobals")
      */
     #[Override]
-    public function removeCookie(string $name): bool
+    public function removeCookie(CookieConfiguration $configuration, string $name): bool
     {
         if (!isset($_COOKIE[$name])) {
             return false;
@@ -54,23 +54,46 @@ final class CookieService implements CookieServiceInterface
 
         unset($_COOKIE[$name]);
 
-        return setcookie($name, '', ['expires' => -1]);
+        /**
+         * The browser only removes the cookie if the domain and path match the ones it was set with.
+         * For an empty value PHP sends `deleted`, a 1970 date and `Max-Age=0` anyway, whatever `expires` is.
+         */
+        return setcookie($name, '', $this->createOptions($configuration, 1));
     }
 
     #[Override]
     public function set(CookieConfiguration $configuration, string $name, string $value): bool
     {
-        return setcookie(
-            $name,
-            $value,
-            [
-                'domain' => $configuration->domain,
-                'expires' => time() + $configuration->lifetime,
-                'httponly' => $configuration->httpOnly,
-                'path' => $configuration->path,
-                'samesite' => $configuration->sameSite,
-                'secure' => $configuration->secure,
-            ],
-        );
+        /**
+         * Lifetime 0: a session cookie (no `expires`), kept until the browser closes.
+         * `time() + 0` would instead send `Max-Age=0`, and the browser would drop the cookie right away.
+         */
+        $expires = $configuration->lifetime > 0
+            ? time() + $configuration->lifetime
+            : 0;
+
+        return setcookie($name, $value, $this->createOptions($configuration, $expires));
+    }
+
+    /**
+     * @return array{
+     *  domain: string,
+     *  expires: int,
+     *  httponly: bool,
+     *  path: string,
+     *  samesite: 'Lax'|'None'|'Strict',
+     *  secure: bool,
+     * }
+     */
+    private function createOptions(CookieConfiguration $configuration, int $expires): array
+    {
+        return [
+            'domain' => $configuration->domain,
+            'expires' => $expires,
+            'httponly' => $configuration->httpOnly,
+            'path' => $configuration->path,
+            'samesite' => $configuration->sameSite,
+            'secure' => $configuration->secure,
+        ];
     }
 }

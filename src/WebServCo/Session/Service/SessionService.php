@@ -55,13 +55,16 @@ final class SessionService implements SessionServiceInterface
 
         // Check if cookie is used to store the session id (default behavior).
         if ((bool) ini_get('session.use_cookies')) {
-            // Set a cookie with the same parameters used to start the session, but with date in the past.
+            /**
+             * Set a cookie with the same parameters used to start the session, but with a date in the past.
+             * For an empty value PHP sends `deleted`, a 1970 date and `Max-Age=0` anyway, whatever `expires` is.
+             */
             setcookie(
                 $this->getSessionName(),
                 '',
                 [
                     'domain' => $this->sessionConfiguration->cookieConfiguration->domain,
-                    'expires' => $this->sessionConfiguration->cookieConfiguration->lifetime,
+                    'expires' => 1,
                     'httponly' => $this->sessionConfiguration->cookieConfiguration->httpOnly,
                     'path' => $this->sessionConfiguration->cookieConfiguration->path,
                     'samesite' => $this->sessionConfiguration->cookieConfiguration->sameSite,
