@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library. PHP sessions with cookie settings and lifetime taken from the configuration.",
+    "description" : "A PHP component/library. PHP sessions with cookie settings and lifetime taken from the configuration; a session store started only when needed, a CSRF token and flash messages.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
@@ -30,6 +30,7 @@
     "name" : "webservco/session",
     "require": {
         "php" : "^8.4",
+        "psr/http-message": "^2",
         "webservco/configuration" : "^2",
         "webservco/data" : "^2"
     },
